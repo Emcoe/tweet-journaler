@@ -65,8 +65,6 @@ def linkGetterBreakoutLinksToo(dirtytext):
         endposition = cleantext.find('>')
         if (nextposition < 0) & (nextposition < endposition):
             startposition = nextposition
-        # linkscollected.append(cleantext[endposition+1:endposition+3])
-        # if cleantext[endposition:endposition+2] == "p":
         if cleantext[endposition+1:endposition+17] == "pic.twitter.com/":
             piclinkend = cleantext.find('<', endposition + 17)
             linkscollected = linkscollected + '\n>' + cleantext[endposition + 1:piclinkend]
