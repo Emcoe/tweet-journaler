@@ -5,6 +5,6 @@ If you've ever come across great tweets that you know you'll want to reference a
 
 Call the app with the target tweet's URL after it (e.g. "python3 tweet-journaler.py https://twitter.com/OscarTheGrouch/status/1293263413200728064").
 
-A new text file is created for each twitter account, and the latest tweet is added to the bottom automatically.
+A text file is created for each twitter account, and the latest tweet is added to the bottom automatically.
 
 Simple, open, readable.
