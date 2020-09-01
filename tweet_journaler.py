@@ -5,28 +5,6 @@ import os
 import html
 
 
-# # https://stackoverflow.com/questions/57708/convert-xml-html-entities-into-unicode-string-in-python
-# def unescape(text):
-#     def fixup(m):
-#         text = m.group(0)
-#         if text[:2] == "&#":
-#             # character reference
-#             try:
-#                 if text[:3] == "&#x":
-#                     return unichr(int(text[3:-1], 16))
-#                 else:
-#                     return unichr(int(text[2:-1]))
-#             except ValueError:
-#                 pass
-#         else:
-#             # named entity
-#             try:
-#                 text = unichr(htmlentitydefs.name2codepoint[text[1:-1]])
-#             except KeyError:
-#                 pass
-#         return text # leave as is
-#     return re.sub("&#?\w+;", fixup, text)
-
 def addressMobilizer(inputAddress):
     cleanaddress = inputAddress
     if cleanaddress.find("mobile.twitter.com") > -1:
@@ -58,24 +36,6 @@ def returnFileList(filename):
         if raw[-1][-1] == '\n':
             raw[-1] = raw[-1][:-1]
     return raw
-
-# def Old_linkGetter(dirtytext):
-#     elements = []
-#     links = []
-#     cleantext = dirtytext
-#     link_range  = range(cleantext.count('<'))
-#     for i in link_range:
-#         pos1 = cleantext.find('<')
-#         pos2 = cleantext.find('>') + 1
-#         elements.append(cleantext[pos1:pos2])
-#         cleantext = cleantext[:pos1] + cleantext[pos2:]
-#     for item in elements:
-#         if item.find('data-url="') > -1:
-#             posA = item.find('data-url="') + 10
-#             posB = item.find('"', posA) 
-#             links.append(item[posA:posB])
-#    return [ cleantext , links ]
-
 
 def linkGetter(dirtytext):
     cleantext = dirtytext
@@ -114,8 +74,6 @@ def linkGetterBreakoutLinksToo(dirtytext):
         startposition += 1
     return cleantext + linkscollected + '\n'
 
-
-
 def tweetExtract(filename, tweetid):
     with open(filename, "r") as ht:
         raw = ht.readlines()
@@ -126,12 +84,6 @@ def tweetExtract(filename, tweetid):
             break
     cleantweet = raw[counter][51:]
     cleantweet = html.unescape(cleantweet)
-    # while cleantweet.find("&#10;") > -1:
-    #     space = cleantweet.find("&#10;")
-    # cleantweet = cleantweet[:space] + '\n' + cleantweet[space+5:]
-    # cleantweet = cleantweet[:-1]
-    # os.remove(filename)
-    # !!! linkgetter here
     return linkGetter(cleantweet)
 
 def entryComposer(filename, tweetid, cleanaddress):
@@ -154,12 +106,10 @@ def writeToFile(name, composed):
 
 def checkForDuplicate(tweetid, filename):
     if os.path.isfile(filename) == False:
-        # return 'No file found in duplicate check'
         return False
     with open(filename, "r") as ht:
         raw = ht.read()
         if raw.find(tweetid) == -1:
-            # return 'Tweet ID not found in log'
             return False
         else:
             return True
@@ -170,13 +120,11 @@ def main(address):
     tweetID = addressRegexCleaner(cleanAddress)
     tweetfilename = tweetID + ".txt"
     logfilename = name + ".txt"
-    # print(tweetID + " : " + logfilename + ". " + str(checkForDuplicate(tweetID, logfilename)) + ' is duplicate check.')
     if checkForDuplicate(tweetID, logfilename) == True:
         print('Tweet ' + tweetID + ' is already in log of ' + name + '.')
         return False
     else:
         wget.download(cleanAddress, out=tweetfilename)
-        # downloader(cleanAddress, filename)
         composition = entryComposer(tweetfilename, tweetID, cleanAddress)
         writeToFile(name, composition)
         os.remove(tweetfilename)
